@@ -17,7 +17,7 @@
     [{
         "id" : 1,
         "name" : "Задача 1",
-        "success" : true/false 
+        "success" : true|false 
     }]
 ```
 
@@ -55,7 +55,7 @@ Location: api/field/add/1
     {   
         "idField" : {idField},
         "nameField" : "Подзадача 1",
-        "successField" : false/true
+        "successField" : false|true,
          "idRef": {idRef}
     }
  ```  
@@ -72,7 +72,7 @@ Location: api/field/add/1
 ```json
     {   
         "idField" : {idField},
-        "successField" : false/true
+        "successField" : false|true,
          "idRef": {idRef}
     }
  ```  
