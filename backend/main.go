@@ -8,6 +8,6 @@ func GetNameAndTeam(Name, Team string) string {
 }
 
 func main() {
-	fmt.Println("Hello World")
+	fmt.Println("Hello, World")
 	fmt.Printf(GetNameAndTeam("Andrey", "Todolist"))
 }
