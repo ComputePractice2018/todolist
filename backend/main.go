@@ -1,13 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
 
-//GetNameAndTeam возвращает приветствие участнику команды
-func GetNameAndTeam(Name, Team string) string {
-	return fmt.Sprintf("Hello, %s, from %s team", Name, Team)
-}
+	"github.com/ComputePractice2018/todolist/backend/utils"
+)
 
 func main() {
 	fmt.Println("Hello, World")
-	fmt.Printf(GetNameAndTeam("Andrey", "Todolist"))
+	fmt.Printf(utils.GetNameAndTeam("Andrey", "Todolist"))
 }
