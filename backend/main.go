@@ -1,12 +1,15 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 
 	"github.com/ComputePractice2018/todolist/backend/utils"
 )
 
 func main() {
-	fmt.Println("Hello, World")
-	fmt.Printf(utils.GetNameAndTeam("Andrey", "Todolist"))
+	var name = flag.String("name", "Mikhail", "имя участника команды")
+	var team = flag.String("team", "Todolist", "название команды")
+	flag.Parse()
+	fmt.Printf(utils.GetNameAndTeam(*name, *team))
 }
