@@ -81,3 +81,16 @@ Location: api/field/add/1
 ### №5 DELETE api/task/del/{id}
 
 Ответ: 204  No Content
+
+======
+
+## Как собрать и запускать
+
+Backend:
+
+```bat
+cd backend 
+docker build -f Dockerfile -t todolist:<имя ветки> .
+docker run --rm --name todolist -e NAME=<параметр приложения> todolist:<имя ветки>
+```
+
