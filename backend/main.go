@@ -12,6 +12,6 @@ func main() {
 		var team = flag.String("team", "Todolist", "название команды")*/
 	//flag.Parse()
 
-	http.HandleFunc("/api/task/getList", server.GetList)
-	log.Fatal(http.ListenAndServe(":8089", nil))
+	http.HandleFunc("/api/task/getList", server.ListHandler)
+	log.Fatal(http.ListenAndServe(":8095", nil))
 }
