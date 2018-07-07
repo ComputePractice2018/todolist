@@ -90,7 +90,14 @@ Backend:
 
 ```bat
 cd backend 
-docker build -f Dockerfile -t todolist:<имя ветки> .
-docker run --rm --name todolist -e NAME=<параметр приложения> todolist:<имя ветки>
+docker build -f Dockerfile -t todolistbackend:<имя ветки> .
+docker run --rm --name todolistbackend -e NAME=<параметр приложения> todolistbackend:<имя ветки>
 ```
 
+Frontend:
+
+```bat
+cd frontend 
+docker build -f Dockerfile -t todolistfrontend:<имя ветки> .
+docker run -d --rm --name todolistfrontend -p 80:80 todolistfrontend:<имя ветки>
+```
