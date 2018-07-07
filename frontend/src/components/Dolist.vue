@@ -1,8 +1,6 @@
 <template>
   <div class="hello">
     <h1>{{ title }}</h1>
-<<<<<<< HEAD
-=======
     <table>
       <tr>
         <th>ID</th>
@@ -27,7 +25,6 @@
       <button v-if="edit_index == -1" v-on:click="add_task">Добавить</button>
       <button v-on:click="make_new_task" v-if="edit_index > -1">Закончить редактирование</button>
     </form>
->>>>>>> issue-11
   </div>
 </template>
 
@@ -36,8 +33,6 @@ export default {
   name: 'Dolist',
   props: {
     title: String
-<<<<<<< HEAD
-=======
   },
   data: function () {
     return {
@@ -81,13 +76,8 @@ export default {
         'success': ''
       }
     }
->>>>>>> issue-11
   }
 }
 </script>
 <style>
-<<<<<<< HEAD
-
-=======
->>>>>>> issue-11
 </style>
