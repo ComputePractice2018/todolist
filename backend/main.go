@@ -18,6 +18,7 @@ func main() {
 	//роутинг списка задач
 	router.HandleFunc("/api/todolist/task/", server.GetList).Methods("GET")
 	router.HandleFunc("/api/todolist/task/", server.AddList).Methods("POST")
+	router.HandleFunc("/api/todolist/task/{id}", server.EditList).Methods("PUT")
 	router.HandleFunc("/api/todolist/task/{id}", server.DeleteList).Methods("DELETE")
 
 	//роутинг подзадач в списке
