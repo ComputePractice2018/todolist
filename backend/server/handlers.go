@@ -9,21 +9,6 @@ import (
 	"github.com/ComputePractice2018/todolist/backend/data"
 )
 
-//ListHandler обрабатывает все запросы к api/task/getList
-func ListHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		GetList(w, r)
-		return
-	}
-	if r.Method == "POST" {
-		AddList(w, r)
-		return
-	}
-	message := fmt.Sprintf("Method %s is not allowed", r.Method)
-	http.Error(w, message, http.StatusMethodNotAllowed)
-	log.Printf(message)
-}
-
 //GetList обрабатывает запросы на получение списка задач
 func GetList(w http.ResponseWriter, r *http.Request) {
 	binaryData, err := json.Marshal(data.ListResponce)
@@ -57,4 +42,25 @@ func AddList(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("%+v", list)
 	w.WriteHeader(http.StatusCreated)
+}
+
+//DeleteList удаляет
+func DeleteList(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func AddTask(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func EditTask(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func DeleteTask(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func SuccessTask(w http.ResponseWriter, r *http.Request) {
+
 }
