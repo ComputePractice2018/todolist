@@ -11,14 +11,6 @@ type List struct {
 	Success bool   `json:"success"`
 }
 
-//Task Структура для хранения списка подзадач
-type Task struct {
-	IDField      int    `json:"idField"`
-	NameField    string `json:"nameField"`
-	SuccessField bool   `json:"successField"`
-	IDRef        int    `json:"idRef"`
-}
-
 //ListResponce хранимый список задач
 var lists []List
 

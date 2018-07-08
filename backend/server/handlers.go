@@ -89,19 +89,3 @@ func DeleteList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Location", r.URL.String())
 	w.WriteHeader(http.StatusNoContent)
 }
-
-func AddTask(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func EditTask(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func DeleteTask(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func SuccessTask(w http.ResponseWriter, r *http.Request) {
-
-}
