@@ -89,3 +89,24 @@ func DeleteList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Location", r.URL.String())
 	w.WriteHeader(http.StatusNoContent)
 }
+
+//CompleteList обрабатывает PUT запрос на изменение выполненности задачи
+func CompleteList(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		message := fmt.Sprintf("Incorrect ID %v", err)
+		http.Error(w, message, http.StatusBadRequest)
+		log.Println(message)
+		return
+	}
+	err = data.CompleteList(id)
+	if err != nil {
+		message := fmt.Sprintf("Incorrect ID %v", err)
+		http.Error(w, message, http.StatusBadRequest)
+		log.Println(message)
+		return
+	}
+	w.Header().Add("Location", r.URL.String())
+	w.WriteHeader(http.StatusAccepted)
+}

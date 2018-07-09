@@ -20,6 +20,7 @@ func main() {
 	router.HandleFunc("/api/todolist/task/", server.AddList).Methods("POST")
 	router.HandleFunc("/api/todolist/task/{id}", server.EditList).Methods("PUT")
 	router.HandleFunc("/api/todolist/task/{id}", server.DeleteList).Methods("DELETE")
+	router.HandleFunc("/api/todolist/task/complete/{id}", server.CompleteList).Methods("PUT")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

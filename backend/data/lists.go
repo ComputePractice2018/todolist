@@ -43,3 +43,19 @@ func DeleteList(ID int) error {
 	lists = append(lists[:ID], lists[ID+1:]...)
 	return nil
 }
+
+//CompleteList изменяет список задач с ID на list
+func CompleteList(ID int) error {
+	if ID < 0 || ID >= len(lists) {
+		return fmt.Errorf("Incorrect ID")
+	}
+	switch lists[ID].Success {
+	case true:
+		lists[ID].Success = false
+	case false:
+		lists[ID].Success = true
+	default:
+		panic("Error")
+	}
+	return nil
+}
