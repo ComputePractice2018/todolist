@@ -1,8 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ title }}</h1>
-<<<<<<< HEAD
-=======
+    <h3 v-if="error">Ошибка: {{error}}</h3>
     <table>
       <tr>
         <th>ID</th>
@@ -25,69 +24,82 @@
       <p> Название:<input type="text" v-model="new_task.name"></p>
       <p>Выполнение:<input type="checkbox" v-model="new_task.success"></p>
       <button v-if="edit_index == -1" v-on:click="add_task">Добавить</button>
-      <button v-on:click="make_new_task" v-if="edit_index > -1">Закончить редактирование</button>
+      <button v-on:click="end_of_edition" v-if="edit_index > -1">Закончить редактирование</button>
     </form>
->>>>>>> issue-11
   </div>
 </template>
 
 <script>
+const axios = require('axios')
 export default {
   name: 'Dolist',
   props: {
     title: String
-<<<<<<< HEAD
-=======
   },
   data: function () {
     return {
-      task_list: [
-        {
-          'id': '0',
-          'name': 'Задача №1',
-          'success': true
-        },
-        {
-          'id': '1',
-          'name': 'Задача №2',
-          'success': false
-        }
-      ],
+      task_list: [],
       new_task:
         {
           'id': '',
           'name': '',
           'success': ''
         },
-      edit_index: -1
+      edit_index: -1,
+      error: ''
     }
   },
+  mounted: function () {
+    this.get_tasks()
+  },
   methods: {
+    get_tasks: function () {
+      this.error = ''
+      const url = 'api/task/getList'
+      axios.get(url).then(response => {
+        this.task_list = response.data
+      }).catch(response => {
+        this.error = response.response.data
+      })
+    },
     add_task: function () {
-      this.task_list.push(this.new_task)
+      this.error = ''
+      const url = 'api/task/add'
+      axios.post(url, this.new_task).then(response => {
+        this.task_list.push(this.new_task)
+      }).catch(response => {
+        this.error = response.response.data
+      })
     },
     remove_task: function (item) {
-      this.task_list.splice(this.task_list.indexOf(item), 1)
+      this.error = ''
+      const url = '/api/task/del/' + this.task_list.indexOf(item)
+      axios.delete(url).then(response => {
+        this.task_list.splice(this.task_list.indexOf(item), 1)
+      }).catch(response => {
+        this.error = response.response.data
+      })
     },
     edit_task: function (item) {
       this.edit_index = this.task_list.indexOf(item)
       this.new_task = this.task_list[this.edit_index]
     },
-    make_new_task: function () {
-      this.edit_index = -1
-      this.new_task = {
-        'id': '',
-        'name': '',
-        'success': ''
-      }
+    end_of_edition: function () {
+      this.error = ''
+      const url = 'api/task/' + this.edit_index
+      axios.put(url, this.new_task).then(response => {
+        this.edit_index = -1
+        this.new_task = {
+          'id': '',
+          'name': '',
+          'success': ''
+        }
+      }).catch(response => {
+        this.error = response.response.data
+      })
     }
->>>>>>> issue-11
   }
 }
 </script>
 <style>
-<<<<<<< HEAD
-
-=======
->>>>>>> issue-11
 </style>
