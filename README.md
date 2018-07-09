@@ -4,13 +4,13 @@
 
 1. Как пользователь, я хочу иметь возможность просмотреть все мои задачи.
 2. Как пользователь, я хочу иметь возможность добавить задачу (Название), чтобы пополнять список задач.
-3. Как пользователь, я хочу иметь возможность добавлять подзачи (1),изменять подзадачу (2) ,удалять подзадачи(3).
-4. Как пользователь, я хочу иметь возможность  отмечать  выполненые подзадачи.
-5. Как пользователь, я хочу иметь возможность удалить задачу, чтобы не хранить неактуальную информацию.
+3. Как пользователь, я хочу иметь возможность удалить задачу, чтобы не хранить неактуальную информацию.
+4. Как пользователь, я хочу иметь возможность изменить задачу.
+5. Как пользователь, я хочу иметь возможность отметить выполненность или снимать выполненность задачи 
 
 ## REST API
 
-### №1 GET api/task/getList 
+### №1 GET api/todolist/task 
 
 Ответ: 200 ОК
 ```json
@@ -21,7 +21,8 @@
     }]
 ```
 
-### №2 POST api/task/add
+
+### №2 POST api/todolist/task
 
 Тело запроса:
 ```json
@@ -29,58 +30,44 @@
         "name" : "Задача 1",
         "success" : false 
     }
- ```   
+ ```
 Ответ: 201 Created
-Location: api/task/add/1
+Location: api/todolist/task/
 
-### №3.1 POST api/field/add/{idRef}
+
+
+### №3 DELETE api/todolist/task/{id}
+
+Ответ: 204  No Content
+
+
+### №4 PUT api/todolist/task/{id}
 
 Тело запроса:
 ```json
     {
-        "nameField" : "Подзадача 1",
-        "successField" : false,
-         "idRef": {idRef}
+        "id": 1,
+        "name" : "Задача 1",
+        "success" : false 
     }
- ```   
-Ответ: 201 Created
-Location: api/field/add/1
+ ```
+
+Ответ: 202 Accepted Location: /api/todolist/task/1
 
 
-
-### №3.2 PUT api/edit/{idRef}/{idField}
+### №5 PUT api/todolist/task/complete/{id}
 
 Тело запроса:
 ```json
-    {   
-        "idField" : {idField},
-        "nameField" : "Подзадача 1",
-        "successField" : false|true,
-         "idRef": {idRef}
+    {
+        "id": 1,
+        "name" : "Задача 1",
+        "success" : true 
     }
- ```  
-Ответ: 202 Accepted
+ ```
 
-### №3.3 DELETE api/field/del/{idField}
+Ответ: 202 Accepted Location: /api/todolist/task/complete/1
 
-Ответ: 204  No Content
-
-
-### №4 PUT api/success/{idRef}/{idField}
-
-Тело запроса:
-```json
-    {   
-        "idField" : {idField},
-        "successField" : false|true,
-         "idRef": {idRef}
-    }
- ```  
-Ответ: 202 Accepted
-
-### №5 DELETE api/task/del/{id}
-
-Ответ: 204  No Content
 
 ======
 
