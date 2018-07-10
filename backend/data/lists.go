@@ -11,35 +11,66 @@ type List struct {
 	Success bool   `json:"success"`
 }
 
-//ListResponce хранимый список задач
-var lists []List
+//ListInterface - интерфейс для работы со списком задач
+type ListInterface interface {
+	GetList() []List
+	AddList(list List) int
+	EditList(list List, ID int) error
+	DeleteList(ID int) error
+	CompleteList(ID int) error
+}
+
+//ListTask структура для списка задач
+type ListTask struct {
+	lists []List
+}
+
+//NewListTask конструктор списка задач
+func NewListTask() *ListTask {
+	return &ListTask{}
+}
 
 //GetList возвращает список задач
-func GetList() []List {
-	return lists
+func (lt *ListTask) GetList() []List {
+	return lt.lists
 }
 
 //AddList добавляет список задач и возвращает ID
-func AddList(list List) int {
-	ID := len(lists)
-	lists = append(lists, list)
+func (lt *ListTask) AddList(list List) int {
+	ID := len(lt.lists)
+	lt.lists = append(lt.lists, list)
 	return ID
 }
 
 //EditList изменяет список задач с ID на list
-func EditList(list List, ID int) error {
-	if ID < 0 || ID >= len(lists) {
+func (lt *ListTask) EditList(list List, ID int) error {
+	if ID < 0 || ID >= len(lt.lists) {
 		return fmt.Errorf("Incorrect ID")
 	}
-	lists[ID] = list
+	lt.lists[ID] = list
 	return nil
 }
 
 //DeleteList удаляет список задач по ID
-func DeleteList(ID int) error {
-	if ID < 0 || ID >= len(lists) {
+func (lt *ListTask) DeleteList(ID int) error {
+	if ID < 0 || ID >= len(lt.lists) {
 		return fmt.Errorf("Incorrect ID")
 	}
-	lists = append(lists[:ID], lists[ID+1:]...)
+	lt.lists = append(lt.lists[:ID], lt.lists[ID+1:]...)
+	return nil
+}
+
+//CompleteList изменяет список задач с ID на list
+func (lt *ListTask) CompleteList(ID int) error {
+	if ID < 0 || ID >= len(lt.lists) {
+		return fmt.Errorf("Incorrect ID")
+	}
+	switch lt.lists[ID].Success {
+	case true:
+		lt.lists[ID].Success = false
+	case false:
+		lt.lists[ID].Success = true
+	default:
+	}
 	return nil
 }
