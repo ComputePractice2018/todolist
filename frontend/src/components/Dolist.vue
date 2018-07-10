@@ -1,105 +1,251 @@
 <template>
-  <div class="hello">
-    <h1>{{ title }}</h1>
-    <h3 v-if="error">Ошибка: {{error}}</h3>
-    <table>
-      <tr>
-        <th>ID</th>
-        <th>Название</th>
-        <th>Выполнена</th>
-      </tr>
-      <tr v-for="task in task_list" v-bind:key="task.id">
-       <td>{{task.id}}</td>
-       <td>{{task.name}}</td>
-       <td>{{task.success}}</td>
-       <td><button
-        v-on:click="remove_task(task)">Удалить задачу</button></td>
-        <td><button
-        v-on:click="edit_task(task)">Редактировать задачу</button></td>
-      </tr>
-    </table>
-     <h3 v-if="edit_index == -1">Новая задача</h3>
-    <form>
-      <p> ID:<input type="text" v-model="new_task.id"></p>
-      <p> Название:<input type="text" v-model="new_task.name"></p>
-      <p>Выполнение:<input type="checkbox" v-model="new_task.success"></p>
-      <button v-if="edit_index == -1" v-on:click="add_task">Добавить</button>
-      <button v-on:click="end_of_edition" v-if="edit_index > -1">Закончить редактирование</button>
-    </form>
-  </div>
+  <b-row>
+    <b-col sm="8" offset-sm="2">
+      <input type="text" class="todo-input" placeholder="Добавьте задачи и нажмите Enter"
+     v-model="new_task" @keyup.enter="add_task"/>
+    <b-container>
+      <p> {{ error }}</p>
+        <table class="table table-striped table-dark">
+          <transition-group name="fade" enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
+             <tr v-for="(item, index) in todosFiltered" :key="item.id" >
+                 <td  class="w-10"><input class="mych" type="checkbox" v-model="item.success" @click="editSuccess(item)"></td>
+                 <td class="w-100">
+                    <div v-if="!item.editing" class="todo-item-label" :class="{ success : item.success }">{{ item.name }}</div>
+                    <input v-else class="todo-item-edit" type="text" @blur="doneEdit(item)" v-model="item.name" @keyup.enter="doneEdit(item)" @keyup.esc="cancelEdit(item)" v-focus>
+                  </td>
+                  <td class="w-10">
+                     <button @click="editTodo(item)"><ion-icon name="create"></ion-icon></button>
+                  </td>
+                  <td class="w-10">
+                    <button class="btn-danger" @click="removeTodo(item,index)"><ion-icon name="close"></ion-icon></button>
+                  </td>
+              </tr>
+           </transition-group>
+        </table>
+    </b-container>
+    <hr class="myhr"/>
+    <b-row>
+    <b-col md="5" offset-md="1">
+    </b-col>
+    <b-col md="6">
+        <span>Не выполнено задач: {{ remaining }}</span>
+    </b-col>
+</b-row>
+<hr class="myhr"/>
+    <b-row>
+        <b-col lg="1" offset-lg="1" sm="1" offset-sm="1" cols="1" offset="1">
+          <button :class="{ 'active': filter == 'all' }" @click="filter = 'all'">Все</button>
+        </b-col>
+        <b-col lg="2" offset-lg="3" sm="2" offset-sm="1" cols="2" offset="1">
+          <button  :class="{ 'active': filter == 'active' }" @click="filter = 'active'">Активные</button>
+        </b-col>
+        <b-col lg="2" offset-lg="2" sm="2" offset-sm="1" cols="2" offset="1">
+          <button  :class="{ 'active': filter == 'success' }" @click="filter = 'success'">Выполненные</button>
+       </b-col>
+    </b-row>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
 const axios = require('axios')
 export default {
-  name: 'Dolist',
-  props: {
-    title: String
-  },
-  data: function () {
+  name: 'Todolist',
+  data () {
     return {
-      task_list: [],
-      new_task:
-        {
-          'id': '',
-          'name': '',
-          'success': ''
-        },
-      edit_index: -1,
-      error: ''
+      new_task: '',
+      beforeEditCache: '',
+      filter: 'all',
+      error: '',
+      tasks: []
+    }
+  },
+  computed: {
+    remaining () {
+      return this.tasks.filter(tasks => !tasks.success).length
+    },
+    anyRemaining () {
+      return this.remaining !== 0
+    },
+    todosFiltered () {
+      if (this.filter === 'all') {
+        return this.tasks
+      } else if (this.filter === 'active') {
+        return this.tasks.filter(todo => !todo.success)
+      } else if (this.filter === 'success') {
+        return this.tasks.filter(todo => todo.success)
+      }
+      return this.todos
+    },
+    showClearsuccessButton () {
+      return this.tasks.filter(todo => todo.success).length > 0
     }
   },
   mounted: function () {
     this.get_tasks()
   },
-  methods: {
-    get_tasks: function () {
+  directives: {
+    focus: {
+      inserted: function (el) {
+        el.focus()
+      }
+    }
+  },
+  methods: { /*  первая загрузка*/ 
+    get_tasks () {
       this.error = ''
-      const url = 'api/task/getList'
+      const url = 'api/todolist/task'
       axios.get(url).then(response => {
-        this.task_list = response.data
+        this.tasks = response.data
       }).catch(response => {
         this.error = response.response.data
       })
     },
-    add_task: function () {
+    add_task () { /* добавление */
+      if (this.new_task.trim().length === 0) {
+        return
+      }
       this.error = ''
-      const url = 'api/task/add'
-      axios.post(url, this.new_task).then(response => {
-        this.task_list.push(this.new_task)
+      const url = 'api/todolist/task'
+      axios.post(url, {
+        name: this.new_task
+      }).then(response => {
+        this.tasks.push({
+          id: response.data.id,
+          name: response.data.name,
+          success: false,
+          editing: false
+        })
+        this.new_task = ''
       }).catch(response => {
         this.error = response.response.data
       })
     },
-    remove_task: function (item) {
-      this.error = ''
-      const url = '/api/task/del/' + this.task_list.indexOf(item)
-      axios.delete(url).then(response => {
-        this.task_list.splice(this.task_list.indexOf(item), 1)
-      }).catch(response => {
-        this.error = response.response.data
-      })
+    removeTodo (item, index) { /* удаление  */
+      axios.delete('api/todolist/task/' + item.id)
+        .then(response => {
+          this.tasks.splice(index, 1)
+        })
+        .catch(error => {
+          this.error = response.response.data
+          console.log(this.error)
+        })
     },
-    edit_task: function (item) {
-      this.edit_index = this.task_list.indexOf(item)
-      this.new_task = this.task_list[this.edit_index]
-    },
-    end_of_edition: function () {
-      this.error = ''
-      const url = 'api/task/' + this.edit_index
-      axios.put(url, this.new_task).then(response => {
-        this.edit_index = -1
-        this.new_task = {
-          'id': '',
-          'name': '',
-          'success': ''
-        }
-      }).catch(response => {
-        this.error = response.response.data
+    doneEdit (item) { /*завершилось редактирование*/
+      if (item.name.trim() === '') {
+        item.name = this.beforeEditCache
+        item.editing = false
+        return /* выйти из редактирования если пустая задача */
+      }
+    axios.patch('api/todolist/task/' + item.id, {
+        name: item.name,
+        success: item.success
       })
+        .then(response => {
+          item.editing = false
+        })
+        .catch(error => {
+          this.error = response.response.data
+          console.log(this.error)
+        })
+    },
+    editSuccess (item) {  /* успешна 1 задача или не успешна  роут такой же что для редактирования*/
+      item.success = !item.success
+      axios.patch('api/todolist/task/' + item.id, {
+        name: item.name,
+        success: item.success
+      })
+        .then(response => {})
+        .catch(error => {
+          this.error = response.response.data
+          console.log(this.error)
+        })
+    },
+    cancelEdit(item) { /* выход из редактирования */
+      item.name = this.beforeEditCache
+      item.editing = false
+      this.beforeEditCache = ''
+    },
+    editTodo(item){ /* начало редактирования занесение кеш */
+      this.beforeEditCache = item.name
+      item.editing = true
     }
   }
 }
 </script>
-<style>
+<style >
+@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css");
+.myhr{
+   border: none;
+    color: #000;
+    background-color: #000;
+    height: 2px;
+}
+  .todo-input {
+    width: 100%;
+    padding: 10px 18px;
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  .todo-item {
+    animation-duration: 0.3s;
+  }
+  .todo-item-label {
+    padding: 10px;
+    margin-left: 12px;
+  }
+  .todo-item-edit {
+   padding: 10px 18px;
+    font-size: 18px;
+  }
+  .success {
+    text-decoration: line-through;
+    color: grey;
+  }
+  button {
+  font-size: 14px;
+  color: #fff;
+  background-color: #1d2124;
+  border-color: #171a1d;
+  border-radius: 5px;
+  border:none;
+  box-shadow: inset 0px 1px 0px #0a0d0e, 0px 5px 0px 0px #6f7274, 0px 10px 5px #fff;
+  }
+  .active {
+    color: #fff;
+    background-color: #1e7e34;
+    border-color: #1c7430;
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .2s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+  .mydel{
+  font-size: 14px;
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+  border-radius: 5px;
+  border:none;
+  }
+  .mycont{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+  }
+  .mych{
+  transform:scale(2);
+  opacity:0.9;
+  cursor:pointer;
+  vertical-align: bottom;
+  }
+@media (min-width: 576px)
+{
+  button {
+    font-size: 12px;
+    }
+}
 </style>

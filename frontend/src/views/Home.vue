@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Dolist title="Список задач"/>
+    <Dolist/>
   </div>
 </template>
 
