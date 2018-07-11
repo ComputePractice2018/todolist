@@ -126,7 +126,7 @@ export default {
         .then(response => {
           this.tasks.splice(index, 1)
         })
-        .catch(error => {
+        .catch(response => {
           this.error = response.response.data
           console.log(this.error)
         })
@@ -137,14 +137,14 @@ export default {
         item.editing = false
         return /* выйти из редактирования если пустая задача */
       }
-    axios.patch('api/todolist/task/' + item.id, {
+      axios.patch('api/todolist/task/' + item.id, {
         name: item.name,
         success: item.success
       })
         .then(response => {
           item.editing = false
         })
-        .catch(error => {
+        .catch(response => {
           this.error = response.response.data
           console.log(this.error)
         })
@@ -156,17 +156,17 @@ export default {
         success: item.success
       })
         .then(response => {})
-        .catch(error => {
+        .catch(response => {
           this.error = response.response.data
           console.log(this.error)
         })
     },
-    cancelEdit(item) { /* выход из редактирования */
+    cancelEdit (item) { /* выход из редактирования */
       item.name = this.beforeEditCache
       item.editing = false
       this.beforeEditCache = ''
     },
-    editTodo(item){ /* начало редактирования занесение кеш */
+    editTodo (item){ /* начало редактирования занесение кеш */
       this.beforeEditCache = item.name
       item.editing = true
     }
