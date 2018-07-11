@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	connection := flag.String("connection", "addressbook:SuperSecretPassword@tcp(db:3306)/addressbook", "mysql connection string")
+	connection := flag.String("connection", "todolist:SuperSecretPassword@tcp(db:3306)/todolist", "mysql connection string")
 	flag.Parse()
 
 	listTask, err := data.NewDBListTask(*connection)
