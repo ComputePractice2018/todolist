@@ -17,7 +17,7 @@ type ListInterface interface {
 	AddList(list List) int
 	EditList(list List, ID int) error
 	DeleteList(ID int) error
-	CompleteList(ID int) error
+	//CompleteList(ID int) error
 }
 
 //ListTask структура для списка задач
@@ -37,29 +37,33 @@ func (lt *ListTask) GetList() []List {
 
 //AddList добавляет список задач и возвращает ID
 func (lt *ListTask) AddList(list List) int {
-	ID := len(lt.lists)
+	id := len(lt.lists) + 1
+	list.ID = id
 	lt.lists = append(lt.lists, list)
-	return ID
+	return id
 }
 
 //EditList изменяет список задач с ID на list
 func (lt *ListTask) EditList(list List, ID int) error {
-	if ID < 0 || ID >= len(lt.lists) {
+	if ID < 1 || ID > len(lt.lists) {
 		return fmt.Errorf("Incorrect ID")
 	}
-	lt.lists[ID] = list
+	lt.lists[ID-1] = list
 	return nil
 }
 
 //DeleteList удаляет список задач по ID
 func (lt *ListTask) DeleteList(ID int) error {
-	if ID < 0 || ID >= len(lt.lists) {
+	if ID < 1 || ID > len(lt.lists) {
 		return fmt.Errorf("Incorrect ID")
 	}
+	ID--
 	lt.lists = append(lt.lists[:ID], lt.lists[ID+1:]...)
+
 	return nil
 }
 
+/*
 //CompleteList изменяет список задач с ID на list
 func (lt *ListTask) CompleteList(ID int) error {
 	if ID < 0 || ID >= len(lt.lists) {
@@ -74,3 +78,4 @@ func (lt *ListTask) CompleteList(ID int) error {
 	}
 	return nil
 }
+*/

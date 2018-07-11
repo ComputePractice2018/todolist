@@ -13,6 +13,6 @@ func NewRouter(listTask data.ListInterface) *mux.Router {
 	router.HandleFunc("/api/todolist/task/", AddList(listTask)).Methods("POST")
 	router.HandleFunc("/api/todolist/task/{id}", EditList(listTask)).Methods("PUT")
 	router.HandleFunc("/api/todolist/task/{id}", DeleteList(listTask)).Methods("DELETE")
-	router.HandleFunc("/api/todolist/task/complete/{id}", CompleteList(listTask)).Methods("PUT")
+	//router.HandleFunc("/api/todolist/task/complete/{id}", CompleteList(listTask)).Methods("PUT")
 	return router
 }

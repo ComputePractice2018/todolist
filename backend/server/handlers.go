@@ -97,6 +97,7 @@ func DeleteList(lt data.ListInterface) func(w http.ResponseWriter, r *http.Reque
 	}
 }
 
+/*
 //CompleteList обрабатывает PUT запрос на изменение выполненности задачи
 func CompleteList(lt data.ListInterface) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -119,3 +120,4 @@ func CompleteList(lt data.ListInterface) func(w http.ResponseWriter, r *http.Req
 		w.WriteHeader(http.StatusAccepted)
 	}
 }
+*/
