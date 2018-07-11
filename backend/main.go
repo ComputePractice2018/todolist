@@ -7,6 +7,7 @@ import (
 
 	"github.com/ComputePractice2018/todolist/backend/data"
 	"github.com/ComputePractice2018/todolist/backend/server"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 func main() {

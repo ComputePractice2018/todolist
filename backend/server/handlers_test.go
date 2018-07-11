@@ -74,24 +74,6 @@ func TestCrud(t *testing.T) {
 		t.Error("Expected new value")
 	}
 
-	//SuccessList
-	/*testData = strings.NewReader(testlist)
-	req, err = http.NewRequest("PUT", "/api/todolist/task/complete/1", testData)
-	w = httptest.NewRecorder()
-
-	router.ServeHTTP(w, req)
-	resp = w.Result()
-	if resp.StatusCode != http.StatusAccepted {
-		t.Error("Expected 201 code")
-	}
-	location = resp.Header.Get("Location")
-	if location[len(location)-1:] != "0" {
-		t.Error("Expected another location")
-	}
-	if len(lt.GetList()) != 1 {
-		t.Error("Expected new value")
-	}*/
-
 	//DeleteList
 	req, err = http.NewRequest("DELETE", "/api/todolist/task/1", nil)
 

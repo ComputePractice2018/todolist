@@ -62,20 +62,3 @@ func (lt *ListTask) DeleteList(ID int) error {
 
 	return nil
 }
-
-/*
-//CompleteList изменяет список задач с ID на list
-func (lt *ListTask) CompleteList(ID int) error {
-	if ID < 0 || ID >= len(lt.lists) {
-		return fmt.Errorf("Incorrect ID")
-	}
-	switch lt.lists[ID].Success {
-	case true:
-		lt.lists[ID].Success = false
-	case false:
-		lt.lists[ID].Success = true
-	default:
-	}
-	return nil
-}
-*/
