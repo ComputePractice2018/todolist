@@ -12,8 +12,8 @@ describe('Dolist.vue', () => {
   })
   it('renders titles', () => {
     const wrapper = shallowMount(Dolist, {})
-    expect(wrapper.text()).to.include('ID')
-    expect(wrapper.text()).to.include('Название')
-    expect(wrapper.text()).to.include('Выполнена')
+    expect(wrapper.text()).to.include('Не выполнено задач:')
+    expect(wrapper.text()).to.include('Активные')
+    expect(wrapper.text()).to.include('Выполненные')
   })
 })
