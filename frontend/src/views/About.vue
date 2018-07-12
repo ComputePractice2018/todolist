@@ -1,6 +1,5 @@
 <template>
-  <div class="about">
-    <h1>О программе</h1>
+  <div class="about text-center">
     <a href="https://github.com/ComputePractice2018/todolist" target="_blank">Проект на GitGub</a>
   </div>
 </template>
