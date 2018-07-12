@@ -2,6 +2,17 @@ version: '3'
 
 services:
   backend:
+    depends_on:
+      - db
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      CONNECTION: todolist:SuperSecretPassword@tcp(db:3306)/todolist
+
+services:
+  backend:
     build: 
       context: ./backend
       dockerfile: Dockerfile
@@ -23,3 +34,12 @@ services:
     restart: always
     ports:
       - "80:80"
+
+      db:
+     image: mysql:latest
+     restart: always
+     environment:
+       MYSQL_RANDOM_ROOT_PASSWORD: "yes" 
+       MYSQL_DATABASE: todolist
+       MYSQL_USER: todolist
+       MYSQL_PASSWORD: SuperSecretPassword
